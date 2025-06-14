@@ -1,0 +1,42 @@
+
+version: '3.8'
+services:
+  web:
+    image: php:8.1-apache
+    container_name: stripe_web
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: stripe_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: stripe_logs
+      MYSQL_USER: stripeuser
+      MYSQL_PASSWORD: stripepass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  websocket:
+    build: ./websocket_server
+    container_name: ws_server
+    ports:
+      - "8080:8080"
+
+  cron:
+    build: ./cron_runner
+    container_name: auto_checker
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+      - db
+
+volumes:
+  db_data:

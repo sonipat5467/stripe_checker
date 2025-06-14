@@ -1,0 +1,4 @@
+{
+  "proxy": "",
+  "checker_endpoint": "https://yourdomain.com/stripe.php"
+}

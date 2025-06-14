@@ -1,0 +1,2 @@
+
+*/5 * * * * root php /app/auto_checker.php >> /var/log/cron.log 2>&1
